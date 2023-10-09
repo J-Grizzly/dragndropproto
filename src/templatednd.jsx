@@ -60,32 +60,6 @@ function App() {
 
       return setStores(reorderedStores)
     }
-
-    const storeSourceIndex = stores.findIndex((store) => store.id === source.droppableId)
-
-    const storeDestinationIndex = stores.findIndex((store => store.id === destination.droppableId))
-
-    const newSourceItems = [...stores[storeSourceIndex].items]
-    const newDestinationItems = source.droppableId !== destination.droppableProps
-      ? [...stores[storeDestinationIndex].items ] 
-      : newSourceItems
-
-    const [deletedItem] = newSourceItems.splice(source.index, 1)
-    newDestinationItems.splice(destination.index, 0, deletedItem)
-
-    const newStores = [...stores]
-
-    newStores[storeSourceIndex] = {
-      ...stores[storeSourceIndex], 
-      items: newSourceItems
-    }
-
-    newStores[storeDestinationIndex] = {
-      ...stores[storeDestinationIndex], 
-      items: newDestinationItems
-    }
-
-    setStores(newStores)
   }
 
   return (
@@ -105,8 +79,8 @@ function App() {
                   
                   {(provided) => (
 
-                    <div  {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-                      <StoreList {...store} />
+                    <div className='store-container' {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
+                      <h3>{store.name}</h3>
                     </div>
                     )}
                 </Draggable>
@@ -120,33 +94,6 @@ function App() {
       </div>
     </div>
   );
-}
-
-function StoreList({name, items, id}) {
-  return (
-    <Droppable droppableId={id}>
-      {(provided) => (
-        <div {...provided.droppableProps} ref={provided.innerRef}>
-              <div className='store-container'>
-                <h3>{name}</h3>
-                <div className='items-container'>
-                  {items.map((item, index) => (
-                    <Draggable draggableId={item.id} index={index} key={item.id}>
-                      {(provided) => (
-                        <div className='item-container' {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-                          <h4>{item.name}</h4>
-                        </div>
-
-                      )}
-                    </Draggable>
-                  ))}
-                </div>
-            </div>
-            {provided.placeholder}
-        </div>
-      )}
-    </Droppable>
-  )
 }
 
 export default App;
